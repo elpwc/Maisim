@@ -1,0 +1,97 @@
+#portal > * > * {
+  z-index: 1000000;
+}
+
+.maisim {
+  position: relative;
+}
+
+.canvasContainer > canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.canvasContainer > div {
+  position: relative;
+}
+
+.canvasContainer > .uiContainer {
+  position: absolute;
+}
+
+canvas {
+  /*border: solid 1px black;*/
+}
+
+.bottomContainer > .bottomItem {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.bottomContainer {
+  /*z-index: -100;*/
+  /*background-color: black;*/
+}
+
+.bottomContainer .bgi {
+  /*z-index: -90;*/
+  z-index: unset;
+}
+.bottomContainer .bga {
+  /*z-index: -80;*/
+}
+.bottomContainer .transperantDiv {
+  /*z-index: -70;*/
+  background-color: black;
+}
+.bottomContainer .judgeLine {
+  /*z-index: -60;*/
+}
+
+.canvasGameRecord {
+  z-index: 2000;
+}
+
+.canvasEffectBack {
+  z-index: 2010;
+}
+
+.canvasSlideTrack {
+  z-index: 2020;
+}
+
+.canvasNotes {
+  z-index: 2030;
+}
+
+.canvasEffectOver {
+  z-index: 2040;
+}
+
+.uiContainer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2050;
+}
+
+.canvasOver {
+  z-index: 2060;
+}
+
+.canvasKeys {
+  z-index: 2070;
+}
+
+.canvasEvent {
+  z-index: 114514;
+}
+
+.maisimLoadMsg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1919810;
+}
