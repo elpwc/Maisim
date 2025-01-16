@@ -1,5 +1,3 @@
-# maiweb
+# Maisim
 
-A webpage-based simulator for maimaiDX
-
-in development
+开发中的某街机音游的React组件版本
