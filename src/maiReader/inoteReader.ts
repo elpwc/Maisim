@@ -419,6 +419,9 @@ export const calculate_speed_related_params_for_notes = (
       speed = speedTap;
     }
 
+    // 观赏谱 速度
+    speed *= (note.speed ?? 1.0);
+
     if (note.type === NoteType.SlideTrack) {
       const emergingTime = (values.maimaiJudgeLineR - values.maimaiSummonLineR) / (tapMoveSpeed * speed);
       notes[i].moveTime = note.time - note.remainTime!;
