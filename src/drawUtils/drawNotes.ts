@@ -7,7 +7,7 @@ import { RegularStyles, SlideColor, TapStyles } from '../utils/types/noteStyles'
 import { JudgeIcon } from '../resourceReaders/judgeIconReader';
 import { JudgeStatus, JudgeTimeStatus } from '../utils/types/judgeStatus';
 import { Note, SectionInfo, SlideLine } from '../utils/note';
-import { NoteType, isTouchNoteType } from '../utils/types/noteType';
+import { NoteType, isTapNoteType, isTouchNoteType } from '../utils/types/noteType';
 import { ShowingNoteProps } from '../utils/showingNoteProps';
 import AnimationUtils from './animation';
 import MaimaiValues from '../maimaiValues';
@@ -247,8 +247,15 @@ export const drawNote = (
       // 数字开头的位置
       θ = (-5 / 8 + (1 / 4) * Number(note.pos)) * Math.PI;
       //console.log(note.pos, θ*180)
-      x = values.center[0] + (props.rho + values.maimaiSummonLineR) * Math.cos(θ);
-      y = values.center[1] + (props.rho + values.maimaiSummonLineR) * Math.sin(θ);
+      if (isTapNoteType(note.type) && note.reverse) {
+        // 观赏谱反转
+        x = values.center[0] + (values.maimaiJudgeLineR * 2 - values.maimaiSummonLineR - props.rho) * Math.cos(θ);
+        y = values.center[1] + (values.maimaiJudgeLineR * 2 - values.maimaiSummonLineR - props.rho) * Math.sin(θ);
+      } else {
+        // 正常
+        x = values.center[0] + (props.rho + values.maimaiSummonLineR) * Math.cos(θ);
+        y = values.center[1] + (props.rho + values.maimaiSummonLineR) * Math.sin(θ);
+      }
     } else if (note.pos !== 'E') {
       // 字母开头的位置
       // 字母开头但不是TOUCH的位置
@@ -272,9 +279,17 @@ export const drawNote = (
         y = touchCenterCoord[1];
       }
     }
+    // Hold尾部坐标
     if (note.type === NoteType.Hold) {
-      tx = values.center[0] + (props.tailRho + values.maimaiSummonLineR) * Math.cos(θ);
-      ty = values.center[1] + (props.tailRho + values.maimaiSummonLineR) * Math.sin(θ);
+      if (note.reverse) {
+        // 观赏谱反转
+        tx = values.center[0] + (values.maimaiJudgeLineR * 2 - values.maimaiSummonLineR - props.tailRho) * Math.cos(θ);
+        ty = values.center[1] + (values.maimaiJudgeLineR * 2 - values.maimaiSummonLineR - props.tailRho) * Math.sin(θ);
+      } else {
+        // 正常
+        tx = values.center[0] + (props.tailRho + values.maimaiSummonLineR) * Math.cos(θ);
+        ty = values.center[1] + (props.tailRho + values.maimaiSummonLineR) * Math.sin(θ);
+      }
     }
 
     //console.log(props, ty )
@@ -295,59 +310,46 @@ export const drawNote = (
     const eachPairLines = [EffectIcon.EachLine1, EffectIcon.EachLine2, EffectIcon.EachLine3, EffectIcon.EachLine4];
 
     const drawNoteLine = (lineImage: HTMLImageElement, alpha: number = 1) => {
+      let lx = values.center[0] - (props.rho + values.maimaiSummonLineR) / k2;
+      let ly = values.center[1] - (props.rho + values.maimaiSummonLineR) / k2;
+      let lw = ((props.rho + values.maimaiSummonLineR) / k2) * 2;
+      let lh = ((props.rho + values.maimaiSummonLineR) / k2) * 2;
+      if (note.reverse) {
+        lx = values.center[0] - (values.maimaiJudgeLineR * 2 - values.maimaiSummonLineR - props.rho) / k2;
+        ly = values.center[1] - (values.maimaiJudgeLineR * 2 - values.maimaiSummonLineR - props.rho) / k2;
+        lw = ((values.maimaiJudgeLineR * 2 - values.maimaiSummonLineR - props.rho) / k2) * 2;
+        lh = ((values.maimaiJudgeLineR * 2 - values.maimaiSummonLineR - props.rho) / k2) * 2;
+      }
       if (note.isBreak) {
-        drawRotationImage(
-          effectBackCtx!,
-          EffectIcon.BreakLine,
-          values.center[0] - (props.rho + values.maimaiSummonLineR) / k2,
-          values.center[1] - (props.rho + values.maimaiSummonLineR) / k2,
-          ((props.rho + values.maimaiSummonLineR) / k2) * 2,
-          ((props.rho + values.maimaiSummonLineR) / k2) * 2,
-          values.center[0],
-          values.center[1],
-          -22.5 + Number(note.pos) * 45,
-          alpha
-        );
+        drawRotationImage(effectBackCtx!, EffectIcon.BreakLine, lx, ly, lw, lh, values.center[0], values.center[1], -22.5 + Number(note.pos) * 45, alpha);
       } else {
         if (note.isEach) {
-          drawRotationImage(
-            effectBackCtx!,
-            EffectIcon.EachLine,
-            values.center[0] - (props.rho + values.maimaiSummonLineR) / k2,
-            values.center[1] - (props.rho + values.maimaiSummonLineR) / k2,
-            ((props.rho + values.maimaiSummonLineR) / k2) * 2,
-            ((props.rho + values.maimaiSummonLineR) / k2) * 2,
-            values.center[0],
-            values.center[1],
-            -22.5 + Number(note.pos) * 45,
-            alpha
-          );
+          drawRotationImage(effectBackCtx!, EffectIcon.EachLine, lx, ly, lw, lh, values.center[0], values.center[1], -22.5 + Number(note.pos) * 45, alpha);
         } else {
-          drawRotationImage(
-            effectBackCtx!,
-            lineImage,
-            values.center[0] - (props.rho + values.maimaiSummonLineR) / k2,
-            values.center[1] - (props.rho + values.maimaiSummonLineR) / k2,
-            ((props.rho + values.maimaiSummonLineR) / k2) * 2,
-            ((props.rho + values.maimaiSummonLineR) / k2) * 2,
-            values.center[0],
-            values.center[1],
-            -22.5 + Number(note.pos) * 45,
-            alpha
-          );
+          drawRotationImage(effectBackCtx!, lineImage, lx, ly, lw, lh, values.center[0], values.center[1], -22.5 + Number(note.pos) * 45, alpha);
         }
       }
     };
 
     const drawEachPairLine = () => {
+      let lx = values.center[0] - (props.rho + values.maimaiSummonLineR) / k3;
+      let ly = values.center[1] - (props.rho + values.maimaiSummonLineR) / k3;
+      let lw = ((props.rho + values.maimaiSummonLineR) / k3) * 2;
+      let lh = ((props.rho + values.maimaiSummonLineR) / k3) * 2;
+      if (note.reverse) {
+        lx = values.center[0] - (values.maimaiJudgeLineR * 2 - values.maimaiSummonLineR - props.rho) / k3;
+        ly = values.center[1] - (values.maimaiJudgeLineR * 2 - values.maimaiSummonLineR - props.rho) / k3;
+        lw = ((values.maimaiJudgeLineR * 2 - values.maimaiSummonLineR - props.rho) / k3) * 2;
+        lh = ((values.maimaiJudgeLineR * 2 - values.maimaiSummonLineR - props.rho) / k3) * 2;
+      }
       if (note.eachPairDistance !== 0 && note.isEachPairFirst) {
         drawRotationImage(
           effectBackCtx!,
           eachPairLines[(note.eachPairDistance ?? 1) - 1],
-          values.center[0] - (props.rho + values.maimaiSummonLineR) / k3,
-          values.center[1] - (props.rho + values.maimaiSummonLineR) / k3,
-          ((props.rho + values.maimaiSummonLineR) / k3) * 2,
-          ((props.rho + values.maimaiSummonLineR) / k3) * 2,
+          lx,
+          ly,
+          lw,
+          lh,
           values.center[0],
           values.center[1],
           -22.5 - (note.eachPairDistance ?? 1) * 11.25 + Number(note.pos) * 45
@@ -480,55 +482,109 @@ export const drawNote = (
           values.holdHeadHeight
         );
       } else if (props.tailRho <= values.maimaiJudgeLineR - values.maimaiSummonLineR) {
-        // 最外侧的HOLD头部
-        drawRotationImage(
-          ctx,
-          image,
-          x - props.radius / kh,
-          y - (props.radius * 1.1547) / kh,
-          (props.radius * 2) / kh,
-          (props.radius * 1.1547) / kh,
-          centerx,
-          centery,
-          -22.5 + Number(note.pos) * 45,
-          alpha,
-          0,
-          0,
-          image.width,
-          values.holdHeadHeight
-        );
-        drawRotationImage(
-          ctx,
-          image,
-          x - props.radius / kh,
-          y,
-          (props.radius * 2) / kh,
-          props.rho - props.tailRho,
-          centerx,
-          centery,
-          -22.5 + Number(note.pos) * 45,
-          alpha,
-          0,
-          values.holdHeadHeight,
-          image.width,
-          image.height - 2 * values.holdHeadHeight
-        );
-        drawRotationImage(
-          ctx,
-          image,
-          tx - props.radius / kh,
-          ty - (props.radius * 1.1547) / kh,
-          (props.radius * 2) / kh,
-          (props.radius * 1.1547) / kh,
-          tx,
-          ty,
-          157.5 + Number(note.pos) * 45,
-          1,
-          0,
-          0,
-          image.width,
-          values.holdHeadHeight
-        );
+        if (note.reverse) {
+          // 观赏谱反转
+          drawRotationImage(
+            ctx,
+            image,
+            x - props.radius / kh,
+            y - (props.radius * 1.1547) / kh,
+            (props.radius * 2) / kh,
+            (props.radius * 1.1547) / kh,
+            centerx,
+            centery,
+            157.5 + Number(note.pos) * 45,
+            alpha,
+            0,
+            0,
+            image.width,
+            values.holdHeadHeight
+          );
+          drawRotationImage(
+            ctx,
+            image,
+            x - props.radius / kh,
+            y,
+            (props.radius * 2) / kh,
+            props.rho - props.tailRho,
+            centerx,
+            centery,
+            157.5 + Number(note.pos) * 45,
+            alpha,
+            0,
+            values.holdHeadHeight,
+            image.width,
+            image.height - 2 * values.holdHeadHeight
+          );
+          drawRotationImage(
+            ctx,
+            image,
+            tx - props.radius / kh,
+            ty - (props.radius * 1.1547) / kh,
+            (props.radius * 2) / kh,
+            (props.radius * 1.1547) / kh,
+            tx,
+            ty,
+            -22.5 + Number(note.pos) * 45,
+            1,
+            0,
+            0,
+            image.width,
+            values.holdHeadHeight
+          );
+        } else {
+          // 正常
+
+          // 最外侧的HOLD头部
+          drawRotationImage(
+            ctx,
+            image,
+            x - props.radius / kh,
+            y - (props.radius * 1.1547) / kh,
+            (props.radius * 2) / kh,
+            (props.radius * 1.1547) / kh,
+            centerx,
+            centery,
+            -22.5 + Number(note.pos) * 45,
+            alpha,
+            0,
+            0,
+            image.width,
+            values.holdHeadHeight
+          );
+          drawRotationImage(
+            ctx,
+            image,
+            x - props.radius / kh,
+            y,
+            (props.radius * 2) / kh,
+            props.rho - props.tailRho,
+            centerx,
+            centery,
+            -22.5 + Number(note.pos) * 45,
+            alpha,
+            0,
+            values.holdHeadHeight,
+            image.width,
+            image.height - 2 * values.holdHeadHeight
+          );
+          drawRotationImage(
+            ctx,
+            image,
+            tx - props.radius / kh,
+            ty - (props.radius * 1.1547) / kh,
+            (props.radius * 2) / kh,
+            (props.radius * 1.1547) / kh,
+            tx,
+            ty,
+            157.5 + Number(note.pos) * 45,
+            1,
+            0,
+            0,
+            image.width,
+            values.holdHeadHeight
+          );
+        }
       }
     };
 

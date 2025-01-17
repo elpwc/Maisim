@@ -56,3 +56,8 @@ export const isSpectatorNoteType = (type: NoteType) => {
 export const isTouchNoteType = (type: NoteType) => {
   return type === NoteType.Touch || type === NoteType.TouchHold || type === NoteType.Spec_TouchHoldSlide || type === NoteType.Spec_TouchSlide;
 };
+
+/** 是否是Tap类Note (Tap, Hold, Slide) */
+export const isTapNoteType = (type: NoteType) => {
+  return type === NoteType.Tap || type === NoteType.Hold || type === NoteType.Slide;
+};
