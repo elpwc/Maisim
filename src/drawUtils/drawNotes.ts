@@ -307,6 +307,13 @@ export const drawNote = (
     /** effect back line */
     let k3 = 0.98;
 
+    // 和观赏谱 zoom计算最终坐标
+    /** Tap最终的左上角坐标 */
+    let tapx = x - (props.radius / k) * (note.zoom ?? 1.0);
+    let tapy = y - (props.radius / k) * (note.zoom ?? 1.0);
+    let tapw = ((props.radius * 2) / k) * (note.zoom ?? 1.0);
+    let taph = ((props.radius * 2) / k) * (note.zoom ?? 1.0);
+
     const eachPairLines = [EffectIcon.EachLine1, EffectIcon.EachLine2, EffectIcon.EachLine3, EffectIcon.EachLine4];
 
     const drawNoteLine = (lineImage: HTMLImageElement, alpha: number = 1) => {
@@ -396,7 +403,7 @@ export const drawNote = (
         drawNoteLine(EffectIcon.NormalLine, alpha);
       }
 
-      drawRotationImage(ctx, image, x - props.radius / k, y - props.radius / k, (props.radius * 2) / k, (props.radius * 2) / k, centerx, centery, -22.5 + Number(note.pos) * 45, alpha);
+      drawRotationImage(ctx, image, tapx, tapy, tapw, taph, centerx, centery, -22.5 + Number(note.pos) * 45, alpha);
       //console.log(props.rho);
     };
 
@@ -422,18 +429,7 @@ export const drawNote = (
         drawNoteLine(EffectIcon.SlideLine, alpha);
       }
 
-      drawRotationImage(
-        ctx,
-        image,
-        x - props.radius / k,
-        y - props.radius / k,
-        (props.radius * 2) / k,
-        (props.radius * 2) / k,
-        centerx,
-        centery,
-        -22.5 + Number(note.pos) * 45 + (rotate ? rotateK : 0),
-        alpha
-      );
+      drawRotationImage(ctx, image, tapx, tapy, tapw, taph, centerx, centery, -22.5 + Number(note.pos) * 45 + (rotate ? rotateK : 0), alpha);
     };
 
     const drawHoldImage = (image: HTMLImageElement, isShortHold: boolean = false) => {
