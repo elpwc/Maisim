@@ -41,6 +41,11 @@ const section_A1 = (type: string | undefined, values: MaimaiValues, endPos: numb
   switch (type) {
     case '-':
       switch (endPos) {
+        case 2:
+          return [
+            { start: 0, areas: ['A1', 'D2'] },
+            { start: 0.5, areas: ['A2'] },
+          ];
         case 3:
           return [
             { start: 0, areas: ['A1', 'D2', 'E2'] },
