@@ -28,7 +28,29 @@ export const analyse_note_original_data = (noteDataOri: string, index: number, c
     return null;
   }
 
-  if (noteData.substring(0, 1) === '0') {
+  // 速度 缩放 透明度
+  if (noteData[0] === '<') {
+    const specParams = noteData.substring(1, noteData.indexOf('>')).split('|');
+    specParams.forEach((specParam, i) => {
+      if (i === 0) {
+        //speed
+        noteRes.speed = Number(specParam);
+      } else if (i === 1) {
+        //zoom
+        noteRes.zoom = Number(specParam);
+      } else if (i === 2) {
+        //transparency
+        noteRes.transparency = Number(specParam);
+      }
+    });
+    noteData = noteData.substring(noteData.indexOf('>') + 1, noteData.length);
+  }
+  // 逆转Note
+  if (noteData[0] === '-') {
+    noteRes.reverse = true;
+    noteData = noteData.substring(1);
+  }
+  if (noteData[0] === '0') {
     // 匹配用 xx/0 表示伪EACH（黄色但只有一个）这样的地狱写法
     noteRes.type = NoteType.Empty;
     return noteRes;
@@ -386,7 +408,7 @@ export const analyse_note_original_data = (noteDataOri: string, index: number, c
             if (each_type === 'V') {
               turnPosesIndex++;
             }
-            console.log(poses,noteRes,i,noteDataOri,types)
+            console.log(poses, noteRes, i, noteDataOri, types);
             const currentSlideLinePos = i === 0 ? noteRes.pos.replaceAll('_', '-') : poses[i - 1].replaceAll('_', '-'),
               currentSlideLineEndPos = flipPos(poses[i].replaceAll('_', '-'), flipMode);
             return {

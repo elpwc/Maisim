@@ -238,4 +238,11 @@ export interface Note {
 
   /** 是否对这个Note启用观赏谱判定 （因为一些观赏谱Note完全不能适用于现有的判定） */
   doSpecJudge?: boolean;
+
+  /** 是否是反转note */
+  reverse?: boolean;
+  /** 图像缩放 */
+  zoom?: number;
+  /** 透明度 */
+  transparency?: number;
 }
