@@ -355,6 +355,12 @@ export const drawNote = (
       }
     };
 
+    /**
+     * 计算幽灵Note的透明度，如果不是幽灵Note直接返回1.0。幽灵Note是透明度会随着时间越来越大的Note
+     * @param type
+     * @param rho
+     * @returns
+     */
     const ghostNoteAlphaCalculation = (type: NoteType, rho: number): number => {
       let alpha = 1;
       if (note.isGhost) {
@@ -380,8 +386,8 @@ export const drawNote = (
     const drawTapImage = (image: HTMLImageElement) => {
       const centerx = x,
         centery = y;
-
-      const alpha = ghostNoteAlphaCalculation(note.type, props.rho);
+      // 透明度处理
+      const alpha = ghostNoteAlphaCalculation(note.type, props.rho) * (note.transparency ?? 1);
 
       if (doDrawEachLine) {
         drawEachPairLine();
@@ -396,7 +402,7 @@ export const drawNote = (
       const centerx = x,
         centery = y;
 
-      const alpha = ghostNoteAlphaCalculation(note.type, props.rho);
+      const alpha = ghostNoteAlphaCalculation(note.type, props.rho) * (note.transparency ?? 1);
 
       let rotateK = 0;
       if (note.isStarTap) {
@@ -433,7 +439,7 @@ export const drawNote = (
       const centerx = x,
         centery = y;
 
-      const alpha = ghostNoteAlphaCalculation(note.type, props.rho);
+      const alpha = ghostNoteAlphaCalculation(note.type, props.rho) * (note.transparency ?? 1);
 
       if (doDrawEachLine) {
         drawEachPairLine();
@@ -532,7 +538,7 @@ export const drawNote = (
       let k = (0.65 * values.maimaiScreenR) / 350,
         centerk = (0.8 * values.maimaiScreenR) / 350;
 
-      const alpha = props.status === 0 ? props.radius / values.maimaiTapR : ghostNoteAlphaCalculation(note.type, props.rho);
+      const alpha = (props.status === 0 ? props.radius / values.maimaiTapR : ghostNoteAlphaCalculation(note.type, props.rho)) * (note.transparency ?? 1);
       //console.log(centerx, centery, getPosCenterCoord('A1', values), x, y);
       // 多重TOUCH线
       if ((note.innerTouchOverlap ?? 0) > 0) {
@@ -571,7 +577,7 @@ export const drawNote = (
       const centerx = x,
         centery = y;
 
-      const alpha = ghostNoteAlphaCalculation(note.type, props.rho);
+      const alpha = ghostNoteAlphaCalculation(note.type, props.rho) * (note.transparency ?? 1);
 
       let k = (0.65 * values.maimaiScreenR) / 350,
         centerk = (0.8 * values.maimaiScreenR) / 350;
@@ -715,7 +721,7 @@ export const drawNote = (
     };
 
     const drawSlideTrackImage = (imageTrack: HTMLImageElement, imageStar: HTMLImageElement, wifiTrack?: HTMLImageElement[]) => {
-      const alpha = ghostNoteAlphaCalculation(note.type, props.rho);
+      const alpha = ghostNoteAlphaCalculation(note.type, props.rho) * (note.transparency ?? 1);
       //console.log(note);
       const drawSlideTrackImage_ = () => {
         if (note.isChain) {
@@ -1143,7 +1149,7 @@ export const drawNote = (
       let k = (0.65 * values.maimaiScreenR) / 350,
         centerk = (0.8 * values.maimaiScreenR) / 350;
 
-      const alpha = props.status === 0 ? props.radius / values.maimaiTapR : ghostNoteAlphaCalculation(note.type, props.rho);
+      const alpha = (props.status === 0 ? props.radius / values.maimaiTapR : ghostNoteAlphaCalculation(note.type, props.rho)) * (note.transparency ?? 1);
 
       // 多重TOUCH线
       if ((note.innerTouchOverlap ?? 0) > 0) {
