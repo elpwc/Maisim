@@ -28,6 +28,8 @@ function TestPage() {
   const [key, setkey]: [string, any] = useState('');
   const [showEditor, setshowEditor]: [boolean, any] = useState(false);
   const [maisimComponentKey, setMaisimComponentKey] = useState(1);
+  const [testsheet, settestsheet]: [string, any] = useState('');
+  const [textareacontent, settextareacontent]: [string, any] = useState('');
 
   interface MaisimInfo {
     currentNotes: CurrentNotes;
@@ -60,23 +62,7 @@ function TestPage() {
   const maisimRef = useRef<MaisimControls>(null);
 
   return (
-    <div>
-      <div>
-        <button
-          onClick={() => {
-            if (gameState === GameState.Begin) {
-              maisimRef.current?.start();
-            } else if (gameState === GameState.Pause) {
-              maisimRef.current?.play();
-            } else if (gameState === GameState.Play) {
-              maisimRef.current?.pause();
-            }
-          }}
-        >
-          {gameState === GameState.Play ? 'Pause' : 'Play'}
-        </button>
-      </div>
-
+    <div style={{ display: 'flex', flexDirection: 'row', alignItems: '' }}>
       <Maisim
         ref={maisimRef}
         id={'1'}
@@ -105,7 +91,7 @@ function TestPage() {
         backgroundImage={info.currentNotes.backgroundImage}
         backgroundAnime={info.currentNotes.backgroundAnime}
         backgroundColor={'#136594'}
-        sheet={info.currentNotes.sheet}
+        sheet={testsheet}
         sheetProps={info.currentNotes.sheetProps}
         onPlayStart={(duration: number) => {
           setInfo({ ...info, duration });
@@ -132,6 +118,35 @@ function TestPage() {
         controlPanelStyle={{}}
         controlPanelTrackInitialZoom={80}
       />
+      <div>
+        <button
+          onClick={() => {
+            if (gameState === GameState.Begin) {
+              maisimRef.current?.start();
+            } else if (gameState === GameState.Pause) {
+              maisimRef.current?.play();
+            } else if (gameState === GameState.Play) {
+              maisimRef.current?.pause();
+            }
+          }}
+        >
+          {gameState === GameState.Play ? 'Pause' : 'Play'}
+        </button>
+        <button
+          onClick={() => {
+            settestsheet(textareacontent);
+          }}
+        >
+          set sheet
+        </button>
+        <textarea
+          style={{ width: '300px', height: '500px' }}
+          value={textareacontent}
+          onChange={e => {
+            settextareacontent(e.target.value);
+          }}
+        />
+      </div>
     </div>
   );
 }
