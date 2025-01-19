@@ -604,7 +604,6 @@ export const Maisim = React.forwardRef<MaisimControls, MaisimProps>(
               //keyStates.lastIndexOf((keystate: KeyState) => {return keystate.keyID === })
               if (currentTime.current >= noteIns.time! + maimaiValues.current.judgeResultShowTime) {
                 newNote.status = -1;
-                
               }
             }
             break;
@@ -1204,6 +1203,7 @@ export const Maisim = React.forwardRef<MaisimControls, MaisimProps>(
           }
           return note.status !== -1;
         } else if (noteIns.type === NoteType.Touch || noteIns.type === NoteType.Spec_TouchSlide) {
+          console.log(56444);
           if (note.status === -4) {
             if ((isAuto && autoType === AutoType.Directly) || doEnableKeyboard) {
               note.judgeStatus = JudgeStatus.CriticalPerfect;
@@ -1239,6 +1239,13 @@ export const Maisim = React.forwardRef<MaisimControls, MaisimProps>(
             ) {
               // 超短HOLD, TOUCH HOLD直接判定
 
+              // 判定特效
+              if (noteIns.type === NoteType.TouchHold && doShowEffect && note.judgeStatus !== JudgeStatus.Miss) {
+                JudgeEffectAnimation_Touch(maimaiValues.current, animationFactory.current, ctx_effect_over, noteIns.pos);
+                if (noteIns.hasFirework) {
+                  fireworkAt(maimaiValues.current, noteIns.pos, ctx_effect_back, animationFactory.current);
+                }
+              }
               note.status = -3;
             } else {
               if (note.touched && note.holdPress) {
@@ -1268,6 +1275,13 @@ export const Maisim = React.forwardRef<MaisimControls, MaisimProps>(
                 }
               }
 
+              // 判定特效
+              if (noteIns.type === NoteType.TouchHold && doShowEffect && note.judgeStatus !== JudgeStatus.Miss) {
+                JudgeEffectAnimation_Touch(maimaiValues.current, animationFactory.current, ctx_effect_over, noteIns.pos);
+                if (noteIns.hasFirework) {
+                  fireworkAt(maimaiValues.current, noteIns.pos, ctx_effect_back, animationFactory.current);
+                }
+              }
               // HOLD和TOUCH HOLD的真判定（修正後的
               updateRecord(gameRecord.current, noteIns, note, currentSheet.current!.basicEvaluation, currentSheet.current!.exEvaluation, currentSheet.current!.oldTheoreticalScore);
 
@@ -1827,6 +1841,10 @@ export const Maisim = React.forwardRef<MaisimControls, MaisimProps>(
 
       return () => {};
     }, []);
+
+    useEffect(() => {
+      readSheet(); // 重新读取谱面
+    }, [sheet]);
 
     useEffect(() => {
       console.log(width, height);
