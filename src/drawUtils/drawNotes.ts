@@ -466,9 +466,9 @@ export const drawNote = (
         drawRotationImage(
           ctx,
           image,
-          x - props.radius / kh,
+          x - (props.radius / kh) * (note.zoom ?? 1.0),
           y - (props.radius * 1.1547) / kh,
-          (props.radius * 2) / kh,
+          ((props.radius * 2) / kh) * (note.zoom ?? 1.0),
           (props.radius * 1.1547) / kh,
           centerx,
           centery,
@@ -485,9 +485,9 @@ export const drawNote = (
         drawRotationImage(
           ctx,
           image,
-          x - props.radius / kh,
+          x - (props.radius / kh) * (note.zoom ?? 1.0),
           y - (props.radius * 1.1547) / kh,
-          (props.radius * 2) / kh,
+          ((props.radius * 2) / kh) * (note.zoom ?? 1.0),
           (props.radius * 1.1547) / kh,
           centerx,
           centery,
@@ -568,9 +568,9 @@ export const drawNote = (
           drawRotationImage(
             ctx,
             image,
-            x - props.radius / kh,
+            x - (props.radius / kh) * (note.zoom ?? 1.0),
             y - (props.radius * 1.1547) / kh,
-            (props.radius * 2) / kh,
+            ((props.radius * 2) / kh) * (note.zoom ?? 1.0),
             (props.radius * 1.1547) / kh,
             centerx,
             centery,
@@ -587,9 +587,9 @@ export const drawNote = (
           drawRotationImage(
             ctx,
             image,
-            x - props.radius / kh,
+            x - (props.radius / kh) * (note.zoom ?? 1.0),
             y,
-            (props.radius * 2) / kh,
+            ((props.radius * 2) / kh) * (note.zoom ?? 1.0),
             props.rho - props.tailRho,
             centerx,
             centery,
@@ -606,9 +606,9 @@ export const drawNote = (
           drawRotationImage(
             ctx,
             image,
-            tx - props.radius / kh,
+            tx - (props.radius / kh) * (note.zoom ?? 1.0),
             ty - (props.radius * 1.1547) / kh,
-            (props.radius * 2) / kh,
+            ((props.radius * 2) / kh) * (note.zoom ?? 1.0),
             (props.radius * 1.1547) / kh,
             tx,
             ty,
@@ -639,20 +639,20 @@ export const drawNote = (
         drawRotationImage(
           ctx,
           note.innerTouchOverlap === 1 ? NoteIcon.touch_two : NoteIcon.touch_each_two,
-          x - (NoteIcon.touch_two.width * centerk) / 2,
-          y - (NoteIcon.touch_two.height * centerk) / 2,
-          NoteIcon.touch_two.width * centerk,
-          NoteIcon.touch_two.height * centerk
+          x - ((NoteIcon.touch_two.width * centerk) / 2) * (note.zoom ?? 1.0),
+          y - ((NoteIcon.touch_two.height * centerk) / 2) * (note.zoom ?? 1.0),
+          NoteIcon.touch_two.width * centerk * (note.zoom ?? 1.0),
+          NoteIcon.touch_two.height * centerk * (note.zoom ?? 1.0)
         );
       }
       if ((note.outerTouchOverlap ?? 0) > 0) {
         drawRotationImage(
           ctx,
           note.outerTouchOverlap === 1 ? NoteIcon.touch_three : NoteIcon.touch_each_three,
-          x - (NoteIcon.touch_three.width * centerk) / 2,
-          y - (NoteIcon.touch_three.height * centerk) / 2,
-          NoteIcon.touch_three.width * centerk,
-          NoteIcon.touch_three.height * centerk
+          x - ((NoteIcon.touch_three.width * centerk) / 2) * (note.zoom ?? 1.0),
+          y - ((NoteIcon.touch_three.height * centerk) / 2) * (note.zoom ?? 1.0),
+          NoteIcon.touch_three.width * centerk * (note.zoom ?? 1.0),
+          NoteIcon.touch_three.height * centerk * (note.zoom ?? 1.0)
         );
       }
 
@@ -661,10 +661,10 @@ export const drawNote = (
         drawRotationImage(
           ctx,
           image,
-          x - (image.width * k) / 2,
-          y + values.touchMaxDistance - (6.5 * values.maimaiScreenR) / 350 - props.rho,
-          image.width * k,
-          image.height * k,
+          x - ((image.width * k) / 2) * (note.zoom ?? 1.0),
+          y + (values.touchMaxDistance - (6.5 * values.maimaiScreenR) / 350 - props.rho) * (note.zoom ?? 1.0),
+          image.width * k * (note.zoom ?? 1.0),
+          image.height * k * (note.zoom ?? 1.0),
           x,
           y,
           90 * i,
@@ -682,10 +682,11 @@ export const drawNote = (
       drawRotationImage(
         ctx,
         imageCenter,
-        x - (imageCenter.width * k) / 2,
-        y - (imageCenter.height * k) / 2,
-        imageCenter.width * k,
-        imageCenter.height * k,
+        x - ((imageCenter.width * k) / 2) * (note.zoom ?? 1.0),
+        y - ((imageCenter.height * k) / 2) * (note.zoom ?? 1.0),
+        imageCenter.width * k * (note.zoom ?? 1.0),
+        imageCenter.height * k * (note.zoom ?? 1.0),
+        0,
         0,
         0,
         alpha,
@@ -723,16 +724,23 @@ export const drawNote = (
 
       // 多重TOUCH线
       if ((note.innerTouchOverlap ?? 0) > 0) {
-        drawRotationImage(ctx, imageTouchTwo, x - (imageTouchTwo.width * centerk) / 2, y - (imageTouchTwo.height * centerk) / 2, imageTouchTwo.width * centerk, imageTouchTwo.height * centerk);
+        drawRotationImage(
+          ctx,
+          imageTouchTwo,
+          x - ((imageTouchTwo.width * centerk) / 2) * (note.zoom ?? 1.0),
+          y - ((imageTouchTwo.height * centerk) / 2) * (note.zoom ?? 1.0),
+          imageTouchTwo.width * centerk * (note.zoom ?? 1.0),
+          imageTouchTwo.height * centerk * (note.zoom ?? 1.0)
+        );
       }
       if ((note.outerTouchOverlap ?? 0) > 0) {
         drawRotationImage(
           ctx,
           imageTouchThree,
-          x - (imageTouchThree.width * centerk) / 2,
-          y - (imageTouchThree.height * centerk) / 2,
-          imageTouchThree.width * centerk,
-          imageTouchThree.height * centerk
+          x - ((imageTouchThree.width * centerk) / 2) * (note.zoom ?? 1.0),
+          y - ((imageTouchThree.height * centerk) / 2) * (note.zoom ?? 1.0),
+          imageTouchThree.width * centerk * (note.zoom ?? 1.0),
+          imageTouchThree.height * centerk * (note.zoom ?? 1.0)
         );
       }
 
@@ -741,10 +749,10 @@ export const drawNote = (
           drawRotationImage(
             ctx,
             touchHoldPieces[i],
-            x - (touchHoldPieces[i].width * k) / 2,
-            y + values.touchMaxDistance - (6.5 * values.maimaiScreenR) / 350 - props.rho,
-            touchHoldPieces[i].width * k,
-            touchHoldPieces[i].height * k,
+            x - ((touchHoldPieces[i].width * k) / 2) * (note.zoom ?? 1.0),
+            y + (values.touchMaxDistance - (6.5 * values.maimaiScreenR) / 350 - props.rho) * (note.zoom ?? 1.0),
+            touchHoldPieces[i].width * k * (note.zoom ?? 1.0),
+            touchHoldPieces[i].height * k * (note.zoom ?? 1.0),
             x,
             y,
             135 + 90 * i,
@@ -761,10 +769,10 @@ export const drawNote = (
         drawRotationImage(
           ctx,
           touchHoldCenter,
-          x - (touchHoldCenter.width * centerk) / 2,
-          y - (touchHoldCenter.height * centerk) / 2,
-          touchHoldCenter.width * centerk,
-          touchHoldCenter.height * centerk,
+          x - ((touchHoldCenter.width * centerk) / 2) * (note.zoom ?? 1.0),
+          y - ((touchHoldCenter.height * centerk) / 2) * (note.zoom ?? 1.0),
+          touchHoldCenter.width * centerk * (note.zoom ?? 1.0),
+          touchHoldCenter.height * centerk * (note.zoom ?? 1.0),
           undefined,
           undefined,
           undefined,
@@ -783,10 +791,10 @@ export const drawNote = (
             drawRotationImage(
               ctx,
               touchHoldPieces[i],
-              x - (touchHoldPieces[i].width * k) / 2,
-              y + values.touchMaxDistance - (6.5 * values.maimaiScreenR) / 350 - props.rho,
-              touchHoldPieces[i].width * k,
-              touchHoldPieces[i].height * k,
+              x - ((touchHoldPieces[i].width * k) / 2) * (note.zoom ?? 1.0),
+              y + (values.touchMaxDistance - (6.5 * values.maimaiScreenR) / 350 - props.rho) * (note.zoom ?? 1.0),
+              touchHoldPieces[i].width * k * (note.zoom ?? 1.0),
+              touchHoldPieces[i].height * k * (note.zoom ?? 1.0),
               x,
               y,
               135 + 90 * i,
@@ -803,10 +811,10 @@ export const drawNote = (
           drawRotationImage(
             ctx,
             touchHoldCenter,
-            x - (touchHoldCenter.width * centerk) / 2,
-            y - (touchHoldCenter.height * centerk) / 2,
-            touchHoldCenter.width * centerk,
-            touchHoldCenter.height * centerk,
+            x - ((touchHoldCenter.width * centerk) / 2) * (note.zoom ?? 1.0),
+            y - ((touchHoldCenter.height * centerk) / 2) * (note.zoom ?? 1.0),
+            touchHoldCenter.width * centerk * (note.zoom ?? 1.0),
+            touchHoldCenter.height * centerk * (note.zoom ?? 1.0),
             undefined,
             undefined,
             undefined,
@@ -829,10 +837,10 @@ export const drawNote = (
             drawRotationImage(
               ctx,
               touchHoldPieces[i],
-              x - (touchHoldPieces[i].width * k) / 2,
-              y + values.touchMaxDistance - (6.5 * values.maimaiScreenR) / 350 - props.rho,
-              touchHoldPieces[i].width * k,
-              touchHoldPieces[i].height * k,
+              x - ((touchHoldPieces[i].width * k) / 2) * (note.zoom ?? 1.0),
+              y + (values.touchMaxDistance - (6.5 * values.maimaiScreenR) / 350 - props.rho) * (note.zoom ?? 1.0),
+              touchHoldPieces[i].width * k * (note.zoom ?? 1.0),
+              touchHoldPieces[i].height * k * (note.zoom ?? 1.0),
               x,
               y,
               135 + 90 * i,
@@ -849,10 +857,10 @@ export const drawNote = (
           drawRotationImage(
             ctx,
             touchHoldCenter,
-            x - (touchHoldCenter.width * centerk) / 2,
-            y - (touchHoldCenter.height * centerk) / 2,
-            touchHoldCenter.width * centerk,
-            touchHoldCenter.height * centerk,
+            x - ((touchHoldCenter.width * centerk) / 2) * (note.zoom ?? 1.0),
+            y - ((touchHoldCenter.height * centerk) / 2) * (note.zoom ?? 1.0),
+            touchHoldCenter.width * centerk * (note.zoom ?? 1.0),
+            touchHoldCenter.height * centerk * (note.zoom ?? 1.0),
             undefined,
             undefined,
             undefined,
@@ -870,45 +878,51 @@ export const drawNote = (
           /** gage截取角度 */
           const angle = props.tailRho - 0.5 * π;
 
-          const cutCircleR = touchHoldGage.width * centerk;
+          const cutCircleR = touchHoldGage.width * centerk * (note.zoom ?? 1.0);
           ctx.save();
 
+          const xgage = (x - centerx) * (note.zoom ?? 1.0) + centerx;
+          const ygage = (y - centery) * (note.zoom ?? 1.0) + centery;
+          let txgage = (tx - centerx) * (note.zoom ?? 1.0) + centerx;
+          let tygage = (ty - centery) * (note.zoom ?? 1.0) + centery;
+
           ctx.beginPath();
-          ctx.moveTo(x, y - cutCircleR);
-          ctx.lineTo(x, y);
+          ctx.moveTo(xgage, ygage - cutCircleR);
+          ctx.lineTo(xgage, ygage);
 
-          tx = x + cutCircleR * Math.cos(angle);
-          ty = y + cutCircleR * Math.sin(angle);
+          txgage = xgage + cutCircleR * Math.cos(angle);
+          tygage = ygage + cutCircleR * Math.sin(angle);
 
-          ctx.lineTo(tx, ty);
+          ctx.lineTo(txgage, tygage);
 
           if (angle >= 1.5 * Math.PI && angle <= 2 * Math.PI) {
-            ctx.lineTo(x - cutCircleR, y - cutCircleR);
+            ctx.lineTo(xgage - cutCircleR, ygage - cutCircleR);
           }
           if (angle >= Math.PI && angle <= 2 * Math.PI) {
-            ctx.lineTo(x - cutCircleR, y + cutCircleR);
+            ctx.lineTo(xgage - cutCircleR, ygage + cutCircleR);
           }
           if (angle >= 0.5 * Math.PI && angle <= 2 * Math.PI) {
-            ctx.lineTo(x + cutCircleR, y + cutCircleR);
+            ctx.lineTo(xgage + cutCircleR, ygage + cutCircleR);
           }
           if (angle >= 0 && angle <= 2 * Math.PI) {
-            ctx.lineTo(x + cutCircleR, y - cutCircleR);
+            ctx.lineTo(xgage + cutCircleR, ygage - cutCircleR);
           }
 
-          ctx.lineTo(x, y - cutCircleR);
+          ctx.lineTo(xgage, ygage - cutCircleR);
           ctx.closePath();
           // 画出截取区域 调试用
           // ctx.strokeStyle = 'red';
           // ctx.stroke();
+
           ctx.clip();
 
           drawRotationImage(
             ctx,
             touchHoldGage,
-            x - (touchHoldGage.width * centerk) / 2,
-            y - (touchHoldGage.height * centerk) / 2,
-            touchHoldGage.width * centerk,
-            touchHoldGage.height * centerk,
+            x - ((touchHoldGage.width * centerk) / 2) * (note.zoom ?? 1.0),
+            y - ((touchHoldGage.height * centerk) / 2) * (note.zoom ?? 1.0),
+            touchHoldGage.width * centerk * (note.zoom ?? 1.0),
+            touchHoldGage.height * centerk * (note.zoom ?? 1.0),
             undefined,
             undefined,
             undefined,
@@ -1432,10 +1446,10 @@ export const drawNote = (
         drawRotationImage(
           ctx,
           note.innerTouchOverlap === 1 ? NoteIcon.touch_two : NoteIcon.touch_each_two,
-          x - (NoteIcon.touch_two.width * centerk) / 2,
-          y - (NoteIcon.touch_two.height * centerk) / 2,
-          NoteIcon.touch_two.width * centerk,
-          NoteIcon.touch_two.height * centerk,
+          x - ((NoteIcon.touch_two.width * centerk) / 2) * (note.zoom ?? 1.0),
+          y - ((NoteIcon.touch_two.height * centerk) / 2) * (note.zoom ?? 1.0),
+          NoteIcon.touch_two.width * centerk * (note.zoom ?? 1.0),
+          NoteIcon.touch_two.height * centerk * (note.zoom ?? 1.0),
           undefined,
           undefined,
           undefined,
@@ -1453,10 +1467,10 @@ export const drawNote = (
         drawRotationImage(
           ctx,
           note.outerTouchOverlap === 1 ? NoteIcon.touch_three : NoteIcon.touch_each_three,
-          x - (NoteIcon.touch_three.width * centerk) / 2,
-          y - (NoteIcon.touch_three.height * centerk) / 2,
-          NoteIcon.touch_three.width * centerk,
-          NoteIcon.touch_three.height * centerk,
+          x - ((NoteIcon.touch_three.width * centerk) / 2) * (note.zoom ?? 1.0),
+          y - ((NoteIcon.touch_three.height * centerk) / 2) * (note.zoom ?? 1.0),
+          NoteIcon.touch_three.width * centerk * (note.zoom ?? 1.0),
+          NoteIcon.touch_three.height * centerk * (note.zoom ?? 1.0),
           undefined,
           undefined,
           undefined,
@@ -1475,10 +1489,10 @@ export const drawNote = (
         drawRotationImage(
           ctx,
           image,
-          x - (image.width * k) / 2,
-          y + values.touchSlideMaxDistance - (6.5 * values.maimaiScreenR) / 300 - props.rho,
-          image.width * k,
-          image.height * k,
+          x - ((image.width * k) / 2) * (note.zoom ?? 1.0),
+          y + (values.touchSlideMaxDistance - (6.5 * values.maimaiScreenR) / 300 - props.rho) * (note.zoom ?? 1.0),
+          image.width * k * (note.zoom ?? 1.0),
+          image.height * k * (note.zoom ?? 1.0),
           x,
           y,
           72 * i,
@@ -1496,10 +1510,11 @@ export const drawNote = (
       drawRotationImage(
         ctx,
         imageCenter,
-        x - (imageCenter.width * k) / 2,
-        y - (imageCenter.height * k) / 2,
-        imageCenter.width * k,
-        imageCenter.height * k,
+        x - ((imageCenter.width * k) / 2) * (note.zoom ?? 1.0),
+        y - ((imageCenter.height * k) / 2) * (note.zoom ?? 1.0),
+        imageCenter.width * k * (note.zoom ?? 1.0),
+        imageCenter.height * k * (note.zoom ?? 1.0),
+        0,
         0,
         0,
         alpha,
