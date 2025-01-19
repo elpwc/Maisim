@@ -245,4 +245,11 @@ export interface Note {
   zoom?: number;
   /** 透明度 */
   transparency?: number;
+
+  /** 红色偏移 */
+  rShift?: number;
+  /** 绿色偏移 */
+  gShift?: number;
+  /** 蓝色偏移 */
+  bShift?: number;
 }

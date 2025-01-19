@@ -2,6 +2,7 @@ import { sqrt } from '../utils/math';
 
 /**
  * 画图
+ * （至于为什么是Rotation，因为这个函数最早是用来绘制旋转了x度的图片的，结果逐渐变成绘制指定属性图片的函数了喵）
  * @param ctx
  * @param image
  * @param x
@@ -16,6 +17,9 @@ import { sqrt } from '../utils/math';
  * @param sy 剪切y
  * @param sw 剪切宽度
  * @param sh 剪切高度
+ * @param rShift 红色偏移
+ * @param gShift 绿色偏移
+ * @param bShift 蓝色偏移
  */
 export const drawRotationImage = (
   ctx: CanvasRenderingContext2D,
@@ -31,22 +35,45 @@ export const drawRotationImage = (
   sx?: number,
   sy?: number,
   sw?: number,
-  sh?: number
+  sh?: number,
+  rShift?: number,
+  gShift?: number,
+  bShift?: number
 ) => {
   const TO_RADIANS = Math.PI / 180;
   if (ctx) {
     // 快速点击pause到play出现 TypeError: Illegal invocation at drawRotationImage (_base.ts:40:1)
     try {
+      let imageToDraw = image;
+      if ((rShift || gShift || bShift) && !(rShift === 0 && gShift === 0 && bShift === 0)) {
+        const tempCanvas: HTMLCanvasElement = document.createElement('canvas');
+        const tempCtx: CanvasRenderingContext2D = tempCanvas.getContext('2d')!;
+        tempCanvas.width = imageToDraw.width;
+        tempCanvas.height = imageToDraw.height;
+        tempCtx.drawImage(imageToDraw, 0, 0);
+        const imageData = tempCtx.getImageData(0, 0, imageToDraw.width, imageToDraw.height);
+        const data = imageData.data;
+        for (let i = 0; i < data.length; i += 4) {
+          data[i] = Math.min(255, Math.max(0, data[i] + (rShift ?? 0)));
+          data[i + 1] = Math.min(255, Math.max(0, data[i + 1] + (gShift ?? 0)));
+          data[i + 2] = Math.min(255, Math.max(0, data[i + 2] + (bShift ?? 0)));
+        }
+        tempCtx.putImageData(imageData, 0, 0);
+        const newImage = new Image();
+        newImage.src = tempCanvas.toDataURL();
+        imageToDraw = newImage;
+      }
+
       if (centerX && centerY && r) {
         ctx.save(); //保存状态
         ctx.translate(centerX, centerY); //设置画布上的(0,0)位置，也就是旋转的中心点
         ctx.rotate(r * TO_RADIANS);
         ctx.globalAlpha = alpha ?? 1;
-        ctx.drawImage(image, sx ?? 0, sy ?? 0, sw ?? image.width, sh ?? image.height, x - centerX, y - centerY, w, h);
+        ctx.drawImage(imageToDraw, sx ?? 0, sy ?? 0, sw ?? imageToDraw.width, sh ?? imageToDraw.height, x - centerX, y - centerY, w, h);
         ctx.restore(); //恢复状态
       } else {
         ctx.globalAlpha = alpha ?? 1;
-        ctx.drawImage(image, sx ?? 0, sy ?? 0, sw ?? image.width, sh ?? image.height, x, y, w, h);
+        ctx.drawImage(imageToDraw, sx ?? 0, sy ?? 0, sw ?? imageToDraw.width, sh ?? imageToDraw.height, x, y, w, h);
       }
     } catch (e) {
       console.log(e);
@@ -122,4 +149,35 @@ export const lineLen = (x1: number, y1: number, x2: number, y2: number) => {
 /** 两点间线段长度 点 */
 export const lineLenByPoint = (p1: [number, number], p2: [number, number]): number => {
   return sqrt((p2[0] - p1[0]) ** 2 + (p2[1] - p1[1]) ** 2);
+};
+
+/**
+ * 图像变色
+ * @param image
+ * @param rShift
+ * @param gShift
+ * @param bShift
+ * @returns
+ */
+export const colorShiftImage = (image: HTMLImageElement, rShift: number, gShift: number, bShift: number) => {
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d')!;
+  canvas.width = image.width;
+  canvas.height = image.height;
+  ctx.drawImage(image, 0, 0);
+
+  const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+  const data = imageData.data;
+  for (let i = 0; i < data.length; i += 4) {
+    data[i] = Math.min(255, Math.max(0, data[i] + rShift));
+    data[i + 1] = Math.min(255, Math.max(0, data[i + 1] + gShift));
+    data[i + 2] = Math.min(255, Math.max(0, data[i + 2] + bShift));
+  }
+
+  ctx.putImageData(imageData, 0, 0);
+
+  const newImage = new Image();
+  newImage.src = canvas.toDataURL();
+
+  return newImage;
 };

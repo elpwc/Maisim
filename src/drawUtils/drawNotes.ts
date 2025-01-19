@@ -403,7 +403,7 @@ export const drawNote = (
         drawNoteLine(EffectIcon.NormalLine, alpha);
       }
 
-      drawRotationImage(ctx, image, tapx, tapy, tapw, taph, centerx, centery, -22.5 + Number(note.pos) * 45, alpha);
+      drawRotationImage(ctx, image, tapx, tapy, tapw, taph, centerx, centery, -22.5 + Number(note.pos) * 45, alpha, undefined, undefined, undefined, undefined, note.rShift, note.gShift, note.bShift);
       //console.log(props.rho);
     };
 
@@ -429,7 +429,25 @@ export const drawNote = (
         drawNoteLine(EffectIcon.SlideLine, alpha);
       }
 
-      drawRotationImage(ctx, image, tapx, tapy, tapw, taph, centerx, centery, -22.5 + Number(note.pos) * 45 + (rotate ? rotateK : 0), alpha);
+      drawRotationImage(
+        ctx,
+        image,
+        tapx,
+        tapy,
+        tapw,
+        taph,
+        centerx,
+        centery,
+        -22.5 + Number(note.pos) * 45 + (rotate ? rotateK : 0),
+        alpha,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        note.rShift,
+        note.gShift,
+        note.bShift
+      );
     };
 
     const drawHoldImage = (image: HTMLImageElement, isShortHold: boolean = false) => {
@@ -459,7 +477,10 @@ export const drawNote = (
           0,
           0,
           image.width,
-          values.holdHeadHeight
+          values.holdHeadHeight,
+          note.rShift,
+          note.gShift,
+          note.bShift
         );
         drawRotationImage(
           ctx,
@@ -475,7 +496,10 @@ export const drawNote = (
           0,
           0,
           image.width,
-          values.holdHeadHeight
+          values.holdHeadHeight,
+          note.rShift,
+          note.gShift,
+          note.bShift
         );
       } else if (props.tailRho <= values.maimaiJudgeLineR - values.maimaiSummonLineR) {
         if (note.reverse) {
@@ -494,7 +518,10 @@ export const drawNote = (
             0,
             0,
             image.width,
-            values.holdHeadHeight
+            values.holdHeadHeight,
+            note.rShift,
+            note.gShift,
+            note.bShift
           );
           drawRotationImage(
             ctx,
@@ -510,7 +537,10 @@ export const drawNote = (
             0,
             values.holdHeadHeight,
             image.width,
-            image.height - 2 * values.holdHeadHeight
+            image.height - 2 * values.holdHeadHeight,
+            note.rShift,
+            note.gShift,
+            note.bShift
           );
           drawRotationImage(
             ctx,
@@ -526,7 +556,10 @@ export const drawNote = (
             0,
             0,
             image.width,
-            values.holdHeadHeight
+            values.holdHeadHeight,
+            note.rShift,
+            note.gShift,
+            note.bShift
           );
         } else {
           // 正常
@@ -546,7 +579,10 @@ export const drawNote = (
             0,
             0,
             image.width,
-            values.holdHeadHeight
+            values.holdHeadHeight,
+            note.rShift,
+            note.gShift,
+            note.bShift
           );
           drawRotationImage(
             ctx,
@@ -562,7 +598,10 @@ export const drawNote = (
             0,
             values.holdHeadHeight,
             image.width,
-            image.height - 2 * values.holdHeadHeight
+            image.height - 2 * values.holdHeadHeight,
+            note.rShift,
+            note.gShift,
+            note.bShift
           );
           drawRotationImage(
             ctx,
@@ -578,7 +617,10 @@ export const drawNote = (
             0,
             0,
             image.width,
-            values.holdHeadHeight
+            values.holdHeadHeight,
+            note.rShift,
+            note.gShift,
+            note.bShift
           );
         }
       }
@@ -616,10 +658,45 @@ export const drawNote = (
 
       for (let i = 0; i < 4; i++) {
         // 从下方的叶片开始顺时针绘制
-        drawRotationImage(ctx, image, x - (image.width * k) / 2, y + values.touchMaxDistance - (6.5 * values.maimaiScreenR) / 350 - props.rho, image.width * k, image.height * k, x, y, 90 * i, alpha);
+        drawRotationImage(
+          ctx,
+          image,
+          x - (image.width * k) / 2,
+          y + values.touchMaxDistance - (6.5 * values.maimaiScreenR) / 350 - props.rho,
+          image.width * k,
+          image.height * k,
+          x,
+          y,
+          90 * i,
+          alpha,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          note.rShift,
+          note.gShift,
+          note.bShift
+        );
       }
       // 中心点
-      drawRotationImage(ctx, imageCenter, x - (imageCenter.width * k) / 2, y - (imageCenter.height * k) / 2, imageCenter.width * k, imageCenter.height * k, 0, 0, alpha);
+      drawRotationImage(
+        ctx,
+        imageCenter,
+        x - (imageCenter.width * k) / 2,
+        y - (imageCenter.height * k) / 2,
+        imageCenter.width * k,
+        imageCenter.height * k,
+        0,
+        0,
+        alpha,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        note.rShift,
+        note.gShift,
+        note.bShift
+      );
       // if (props.touched) {
       // 	drawRotationImage(ctx, NoteIcon.touch_just, x - (NoteIcon.touch_just.width ) / 2, y - (NoteIcon.touch_just.height ) / 2, NoteIcon.touch_just.width , NoteIcon.touch_just.height );
       // }
@@ -671,7 +748,14 @@ export const drawNote = (
             x,
             y,
             135 + 90 * i,
-            props.radius / values.maimaiTapR
+            props.radius / values.maimaiTapR,
+            undefined,
+            undefined,
+            undefined,
+            undefined,
+            note.rShift,
+            note.gShift,
+            note.bShift
           );
         }
         drawRotationImage(
@@ -680,7 +764,18 @@ export const drawNote = (
           x - (touchHoldCenter.width * centerk) / 2,
           y - (touchHoldCenter.height * centerk) / 2,
           touchHoldCenter.width * centerk,
-          touchHoldCenter.height * centerk
+          touchHoldCenter.height * centerk,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          note.rShift,
+          note.gShift,
+          note.bShift
         );
       } else {
         if (props.status === 0 || props.status === 1) {
@@ -695,7 +790,14 @@ export const drawNote = (
               x,
               y,
               135 + 90 * i,
-              props.radius / values.maimaiTapR
+              props.radius / values.maimaiTapR,
+              undefined,
+              undefined,
+              undefined,
+              undefined,
+              note.rShift,
+              note.gShift,
+              note.bShift
             );
           }
           drawRotationImage(
@@ -704,9 +806,25 @@ export const drawNote = (
             x - (touchHoldCenter.width * centerk) / 2,
             y - (touchHoldCenter.height * centerk) / 2,
             touchHoldCenter.width * centerk,
-            touchHoldCenter.height * centerk
+            touchHoldCenter.height * centerk,
+            undefined,
+            undefined,
+            undefined,
+            undefined,
+            undefined,
+            undefined,
+            undefined,
+            undefined,
+            note.rShift,
+            note.gShift,
+            note.bShift
           );
         } else if (props.status === 2) {
+          let [r, g, b] = [note.rShift, note.gShift, note.bShift];
+          if (is_miss) {
+            // TOUCH HOLD miss的灰色状态不变色
+            [r, g, b] = [0, 0, 0];
+          }
           for (let i = 0; i < 4; i++) {
             drawRotationImage(
               ctx,
@@ -718,7 +836,14 @@ export const drawNote = (
               x,
               y,
               135 + 90 * i,
-              props.radius / values.maimaiTapR
+              props.radius / values.maimaiTapR,
+              undefined,
+              undefined,
+              undefined,
+              undefined,
+              r,
+              g,
+              b
             );
           }
           drawRotationImage(
@@ -727,7 +852,18 @@ export const drawNote = (
             x - (touchHoldCenter.width * centerk) / 2,
             y - (touchHoldCenter.height * centerk) / 2,
             touchHoldCenter.width * centerk,
-            touchHoldCenter.height * centerk
+            touchHoldCenter.height * centerk,
+            undefined,
+            undefined,
+            undefined,
+            undefined,
+            undefined,
+            undefined,
+            undefined,
+            undefined,
+            r,
+            g,
+            b
           );
 
           // draw gage
@@ -766,7 +902,25 @@ export const drawNote = (
           // ctx.stroke();
           ctx.clip();
 
-          drawRotationImage(ctx, touchHoldGage, x - (touchHoldGage.width * centerk) / 2, y - (touchHoldGage.height * centerk) / 2, touchHoldGage.width * centerk, touchHoldGage.height * centerk);
+          drawRotationImage(
+            ctx,
+            touchHoldGage,
+            x - (touchHoldGage.width * centerk) / 2,
+            y - (touchHoldGage.height * centerk) / 2,
+            touchHoldGage.width * centerk,
+            touchHoldGage.height * centerk,
+            undefined,
+            undefined,
+            undefined,
+            undefined,
+            undefined,
+            undefined,
+            undefined,
+            undefined,
+            r,
+            g,
+            b
+          );
           ctx.restore();
         }
       }
@@ -824,7 +978,14 @@ export const drawNote = (
                     slideData.x - values.center[0],
                     slideData.y - values.center[1],
                     slideData.direction,
-                    props.radius * alpha
+                    props.radius * alpha,
+                    undefined,
+                    undefined,
+                    undefined,
+                    undefined,
+                    note.rShift,
+                    note.gShift,
+                    note.bShift
                   );
                 }
                 ctx_slideTrack.restore();
@@ -894,7 +1055,14 @@ export const drawNote = (
                     slideData[0].x - values.center[0],
                     slideData[0].y - values.center[1],
                     22.534119524645373,
-                    props.radius * 0.5 * alpha
+                    props.radius * 0.5 * alpha,
+                    undefined,
+                    undefined,
+                    undefined,
+                    undefined,
+                    note.rShift,
+                    note.gShift,
+                    note.bShift
                   );
 
                   ctx_slideTrack.save();
@@ -909,7 +1077,14 @@ export const drawNote = (
                     slideData[2].x - (values.APositions.J[0][0] - values.APositions.J[7][0]) - values.center[0],
                     slideData[2].y - values.center[1],
                     -22.534119524645373,
-                    props.radius * 0.5 * alpha
+                    props.radius * 0.5 * alpha,
+                    undefined,
+                    undefined,
+                    undefined,
+                    undefined,
+                    note.rShift,
+                    note.gShift,
+                    note.bShift
                   );
                   ctx_slideTrack.restore();
                 }
@@ -955,7 +1130,14 @@ export const drawNote = (
                   guideStarData.x - values.center[0],
                   guideStarData.y - values.center[1],
                   guideStarData.direction,
-                  (props.guideStarRadius! / values.maimaiTapR) * alpha
+                  (props.guideStarRadius! / values.maimaiTapR) * alpha,
+                  undefined,
+                  undefined,
+                  undefined,
+                  undefined,
+                  note.rShift,
+                  note.gShift,
+                  note.bShift
                 );
                 ctx.restore();
               }
@@ -993,7 +1175,14 @@ export const drawNote = (
                     wifiguide.x - values.center[0],
                     wifiguide.y - values.center[1],
                     wifiguide.direction,
-                    (props.guideStarRadius! / values.maimaiTapR) * alpha
+                    (props.guideStarRadius! / values.maimaiTapR) * alpha,
+                    undefined,
+                    undefined,
+                    undefined,
+                    undefined,
+                    note.rShift,
+                    note.gShift,
+                    note.bShift
                   );
                 });
 
@@ -1039,7 +1228,14 @@ export const drawNote = (
                   slideData.x - values.center[0],
                   slideData.y - values.center[1],
                   slideData.direction,
-                  props.radius * alpha
+                  props.radius * alpha,
+                  undefined,
+                  undefined,
+                  undefined,
+                  undefined,
+                  note.rShift,
+                  note.gShift,
+                  note.bShift
                 );
               }
               ctx_slideTrack.restore();
@@ -1069,7 +1265,14 @@ export const drawNote = (
                 guideStarData.x - values.center[0],
                 guideStarData.y - values.center[1],
                 guideStarData.direction,
-                (props.guideStarRadius! / values.maimaiTapR) * alpha
+                (props.guideStarRadius! / values.maimaiTapR) * alpha,
+                undefined,
+                undefined,
+                undefined,
+                undefined,
+                note.rShift,
+                note.gShift,
+                note.bShift
               );
               ctx.restore();
             }
@@ -1133,7 +1336,14 @@ export const drawNote = (
                   slideData[0].x - values.center[0],
                   slideData[0].y - values.center[1],
                   22.534119524645373,
-                  props.radius * 0.5 * alpha
+                  props.radius * 0.5 * alpha,
+                  undefined,
+                  undefined,
+                  undefined,
+                  undefined,
+                  note.rShift,
+                  note.gShift,
+                  note.bShift
                 );
 
                 ctx_slideTrack.save();
@@ -1148,7 +1358,14 @@ export const drawNote = (
                   slideData[2].x - (values.APositions.J[0][0] - values.APositions.J[7][0]) - values.center[0],
                   slideData[2].y - values.center[1],
                   -22.534119524645373,
-                  props.radius * 0.5 * alpha
+                  props.radius * 0.5 * alpha,
+                  undefined,
+                  undefined,
+                  undefined,
+                  undefined,
+                  note.rShift,
+                  note.gShift,
+                  note.bShift
                 );
                 ctx_slideTrack.restore();
               }
@@ -1179,7 +1396,14 @@ export const drawNote = (
                     wifiguide.x - values.center[0],
                     wifiguide.y - values.center[1],
                     wifiguide.direction,
-                    (props.guideStarRadius! / values.maimaiTapR) * alpha
+                    (props.guideStarRadius! / values.maimaiTapR) * alpha,
+                    undefined,
+                    undefined,
+                    undefined,
+                    undefined,
+                    note.rShift,
+                    note.gShift,
+                    note.bShift
                   );
                 });
 
@@ -1211,7 +1435,18 @@ export const drawNote = (
           x - (NoteIcon.touch_two.width * centerk) / 2,
           y - (NoteIcon.touch_two.height * centerk) / 2,
           NoteIcon.touch_two.width * centerk,
-          NoteIcon.touch_two.height * centerk
+          NoteIcon.touch_two.height * centerk,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          note.rShift,
+          note.gShift,
+          note.bShift
         );
       }
       if ((note.outerTouchOverlap ?? 0) > 0) {
@@ -1221,7 +1456,18 @@ export const drawNote = (
           x - (NoteIcon.touch_three.width * centerk) / 2,
           y - (NoteIcon.touch_three.height * centerk) / 2,
           NoteIcon.touch_three.width * centerk,
-          NoteIcon.touch_three.height * centerk
+          NoteIcon.touch_three.height * centerk,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          note.rShift,
+          note.gShift,
+          note.bShift
         );
       }
       for (let i = 0; i < 5; i++) {
@@ -1236,11 +1482,35 @@ export const drawNote = (
           x,
           y,
           72 * i,
-          alpha
+          alpha,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          note.rShift,
+          note.gShift,
+          note.bShift
         );
       }
       // 中心点
-      drawRotationImage(ctx, imageCenter, x - (imageCenter.width * k) / 2, y - (imageCenter.height * k) / 2, imageCenter.width * k, imageCenter.height * k, 0, 0, alpha);
+      drawRotationImage(
+        ctx,
+        imageCenter,
+        x - (imageCenter.width * k) / 2,
+        y - (imageCenter.height * k) / 2,
+        imageCenter.width * k,
+        imageCenter.height * k,
+        0,
+        0,
+        alpha,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        note.rShift,
+        note.gShift,
+        note.bShift
+      );
       // if (props.touched) {
       // 	drawRotationImage(ctx, NoteIcon.touch_just, x - (NoteIcon.touch_just.width ) / 2, y - (NoteIcon.touch_just.height ) / 2, NoteIcon.touch_just.width , NoteIcon.touch_just.height );
       // }

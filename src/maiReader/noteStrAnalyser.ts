@@ -28,21 +28,45 @@ export const analyse_note_original_data = (noteDataOri: string, index: number, c
     return null;
   }
 
-  // 速度 缩放 透明度
+  // 速度 缩放 透明度 Color
   if (noteData[0] === '<') {
-    const specParams = noteData.substring(1, noteData.indexOf('>')).split('|');
-    specParams.forEach((specParam, i) => {
-      if (i === 0) {
-        //speed
-        noteRes.speed = Number(specParam);
-      } else if (i === 1) {
-        //zoom
-        noteRes.zoom = Number(specParam);
-      } else if (i === 2) {
-        //transparency
-        noteRes.transparency = Number(specParam);
+    const specParamGroups = noteData.substring(1, noteData.indexOf('>')).split('|');
+
+    specParamGroups.forEach((specParamGroup, groupIndex) => {
+      if (specParamGroup !== '') {
+        const specParams = specParamGroup.split(';');
+        if (groupIndex === 0) {
+          // speed zoom transparency
+          specParams.forEach((specParam, i) => {
+            if (i === 0) {
+              //speed
+              noteRes.speed = Number(specParam);
+            } else if (i === 1) {
+              //zoom
+              noteRes.zoom = Number(specParam);
+            } else if (i === 2) {
+              //transparency
+              noteRes.transparency = Number(specParam);
+            }
+          });
+        } else if (groupIndex === 1) {
+          // color
+          specParams.forEach((specParam, i) => {
+            if (i === 0) {
+              //rShift
+              noteRes.rShift = Number(specParam);
+            } else if (i === 1) {
+              //gShift
+              noteRes.gShift = Number(specParam);
+            } else if (i === 2) {
+              //bShift
+              noteRes.bShift = Number(specParam);
+            }
+          });
+        }
       }
     });
+
     noteData = noteData.substring(noteData.indexOf('>') + 1, noteData.length);
   }
   // 逆转Note
