@@ -451,9 +451,14 @@ export const Maisim = React.forwardRef<MaisimControls, MaisimProps>(
       const temp_trackRegions: TrackRegion[] = [];
       currentSheet.current.notes.forEach(note => {
         const offsetNoteTime = getTickOffset(note.time!);
-        const offsetNoteRemainTime = getTickOffset(note.remainTime!);
+        let offsetNoteRemainTime = getTickOffset(note.remainTime!);
+
         let dotWidth = controlPanelTrackInitialZoom * 0.0003;
         if (dotWidth < 0.04) dotWidth = 0.04;
+
+        // 防止过短HOLD TOUCHHOLD不显示
+        if (note.isShortHold || offsetNoteRemainTime / 1000.0 < dotWidth) offsetNoteRemainTime = dotWidth * 1000.0;
+
         switch (note.type) {
           case NoteType.Tap:
             temp_trackRegions.push({
