@@ -462,6 +462,8 @@ const w = (values: MaimaiValues, ct: number, rt: number): { x: number; y: number
   ];
 };
 
+////////////////////////////////////////////////////// SPEC /////////////////////////////////////////////////////////
+
 // -
 const straight_SPEC = (values: MaimaiValues, startPos: string, endPos: string, ct: number, rt: number): { x: number; y: number; direction: number } => {
   const startPosCoord = getPosCenterCoord(startPos, values);
@@ -480,3 +482,22 @@ const straight_SPEC = (values: MaimaiValues, startPos: string, endPos: string, c
     direction,
   };
 };
+
+// ^
+// const curve_SPEC = (values: MaimaiValues, startPos: string, endPos: string, ct: number, rt: number): { x: number; y: number; direction: number } => {
+//   if (endPos > 1 && endPos < 5) {
+//     return {
+//       x: values.center[0] + values.maimaiJudgeLineR * cos((0.25 * (endPos - 1) * (ct / rt) - 0.375) * π),
+//       y: values.center[1] + values.maimaiJudgeLineR * sin((0.25 * (endPos - 1) * (ct / rt) - 0.375) * π),
+//       direction: 45 * (endPos - 1) * (ct / rt) + 202.5,
+//     };
+//   } else if (endPos > 5 && endPos <= 8) {
+//     return {
+//       x: values.center[0] + values.maimaiJudgeLineR * cos((-0.25 * (9 - endPos) * (ct / rt) - 0.375) * π),
+//       y: values.center[1] + values.maimaiJudgeLineR * sin((-0.25 * (9 - endPos) * (ct / rt) - 0.375) * π),
+//       direction: -45 * (9 - endPos) * (ct / rt) + 22.5,
+//     };
+//   } else {
+//     return { x: 0, y: 0, direction: 0 };
+//   }
+// };
